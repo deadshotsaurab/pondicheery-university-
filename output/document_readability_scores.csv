@@ -1,0 +1,13 @@
+file_name,total_words,avg_difficulty_score,layman_%,student_%,professional_%,readability_level
+data\1953_L_1.txt,5131,0.736,21.69,16.8,6.1,EASY
+data\1953_S_23.txt,3327,0.888,17.55,20.5,10.1,EASY
+data\1954_M_25.txt,3512,0.796,20.67,22.29,4.78,EASY
+data\1963_S_59.txt,15106,0.745,20.24,20.57,4.37,EASY
+data\1971_S_1.txt,6463,0.759,18.32,20.25,5.68,EASY
+data\1973_S_68.txt,4900,0.742,19.51,16.84,7.0,EASY
+data\1976_T_9.txt,3746,0.771,21.17,19.38,5.71,EASY
+data\1977_P_19.txt,3579,0.781,24.73,19.36,4.89,EASY
+data\1978_M_13.txt,4636,0.847,20.02,20.73,7.74,EASY
+data\1980_W_3.txt,6118,0.78,20.19,21.38,5.03,EASY
+data\general_english_baseline.txt,9974,0.402,9.15,14.97,0.38,EASY
+data\test.txt,126,0.77,53.17,11.9,0.0,EASY

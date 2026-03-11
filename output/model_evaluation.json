@@ -1,0 +1,15 @@
+{
+    "num_samples": 1362,
+    "num_clusters": 3,
+    "cluster_distribution": {
+        "0": 647,
+        "1": 171,
+        "2": 544
+    },
+    "log_likelihood": -0.326564121876113,
+    "label_mapping": {
+        "2": "LAYMAN",
+        "0": "STUDENT",
+        "1": "PROFESSIONAL"
+    }
+}

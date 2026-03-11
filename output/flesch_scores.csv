@@ -1,0 +1,13 @@
+file_name,flesch_score,flesch_level
+data\1953_L_1.txt,43.44,MODERATE
+data\1953_S_23.txt,47.89,MODERATE
+data\1954_M_25.txt,36.78,MODERATE
+data\1963_S_59.txt,45.67,MODERATE
+data\1971_S_1.txt,41.95,MODERATE
+data\1973_S_68.txt,39.96,MODERATE
+data\1976_T_9.txt,40.23,MODERATE
+data\1977_P_19.txt,27.47,COMPLEX
+data\1978_M_13.txt,8.25,COMPLEX
+data\1980_W_3.txt,37.33,MODERATE
+data\general_english_baseline.txt,-10098.63,COMPLEX
+data\test.txt,65.25,EASY

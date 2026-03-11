@@ -1,0 +1,141 @@
+{
+  "aic": -9088.942689371263,
+  "bic": -7903.403248783024,
+  "log_likelihood": 1.5622640344927945,
+  "converged": true,
+  "n_components": 3,
+  "silhouette_score": 0.20079272222133301,
+  "davies_bouldin_index": 1.4857123011302635,
+  "avg_confidence": 0.9916989587794315,
+  "pct_high_confidence": 98.5172981878089,
+  "cluster_stats": {
+    "1": {
+      "label": "LAYMAN",
+      "word_count": 40,
+      "pct_total": 1.3,
+      "avg_conf": 0.8517744174056002,
+      "min_conf": 0.5728422180808647,
+      "avg_zipf_score": 4.5995,
+      "avg_word_length": 7.15,
+      "avg_syllable_count": 2.175,
+      "avg_domain_specificity": 0.19167625335526697,
+      "avg_wordnet_depth": 9.675,
+      "avg_sim_layman": 0.42214508429169656,
+      "avg_sim_professional": 0.5030904762446881,
+      "avg_seed_gap_LP": -0.08094539195299148,
+      "top_words": [
+        "court",
+        "appeal",
+        "act",
+        "section",
+        "order",
+        "evidence",
+        "provisions",
+        "view",
+        "given",
+        "held",
+        "claim",
+        "legislation",
+        "terms",
+        "basic",
+        "defendant",
+        "judgment",
+        "prosecution",
+        "objection",
+        "tribunal",
+        "regard"
+      ]
+    },
+    "0": {
+      "label": "STUDENT",
+      "word_count": 2980,
+      "pct_total": 98.2,
+      "avg_conf": 0.9941198094472322,
+      "min_conf": 0.5065347605659616,
+      "avg_zipf_score": 4.206291946308725,
+      "avg_word_length": 7.398993288590604,
+      "avg_syllable_count": 2.091275167785235,
+      "avg_domain_specificity": 0.07547826087915452,
+      "avg_wordnet_depth": 6.958724832214765,
+      "avg_sim_layman": 0.4192379713308491,
+      "avg_sim_professional": 0.39218491169830294,
+      "avg_seed_gap_LP": 0.027053059632546148,
+      "top_words": [
+        "meaningful",
+        "maternity",
+        "married",
+        "marriage",
+        "midnight",
+        "coconut",
+        "clubbing",
+        "concerned",
+        "splitting",
+        "spes",
+        "wrongful",
+        "wrongfully",
+        "likewise",
+        "likelihood",
+        "multiplicity",
+        "multiples",
+        "nagendra",
+        "communities",
+        "commonly",
+        "commencement"
+      ]
+    },
+    "2": {
+      "label": "PROFESSIONAL",
+      "word_count": 15,
+      "pct_total": 0.5,
+      "avg_conf": 0.883888736439881,
+      "min_conf": 0.5565327328048303,
+      "avg_zipf_score": 2.8886666666666665,
+      "avg_word_length": 9.533333333333333,
+      "avg_syllable_count": 2.933333333333333,
+      "avg_domain_specificity": 0.0873804976407484,
+      "avg_wordnet_depth": 8.466666666666667,
+      "avg_sim_layman": 0.34728097716967266,
+      "avg_sim_professional": 0.5171542445818583,
+      "avg_seed_gap_LP": -0.16987326741218567,
+      "top_words": [
+        "plaintiff",
+        "jurisdiction",
+        "adjudication",
+        "alienation",
+        "devolution",
+        "enquiry",
+        "corrigendum",
+        "injunction",
+        "probate",
+        "executrix",
+        "forfeiture",
+        "testamentary",
+        "bequest",
+        "corpus",
+        "draughtsmen"
+      ]
+    }
+  },
+  "seed_recovery": {
+    "LAYMAN": {
+      "seeds_in_corpus": 12,
+      "seeds_correct": 0,
+      "rate": 0.0
+    },
+    "STUDENT": {
+      "seeds_in_corpus": 19,
+      "seeds_correct": 7,
+      "rate": 0.3684210526315789
+    },
+    "PROFESSIONAL": {
+      "seeds_in_corpus": 10,
+      "seeds_correct": 10,
+      "rate": 1.0
+    }
+  },
+  "pca_variance_explained": [
+    0.3494522037970614,
+    0.2457660102850528,
+    0.12070292283619627
+  ]
+}
