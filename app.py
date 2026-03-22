@@ -1,10 +1,12 @@
 """
 app.py  —  GMM Word Difficulty Analyser
 Streamlit dashboard: upload .txt files → run pipeline → visualize results
+ENHANCED: Document Readability Analyzer section added
 """
 
 import os
 import io
+import re
 import json
 import tempfile
 import numpy as np
@@ -115,6 +117,76 @@ html, body, [data-testid="stAppViewContainer"] {
 }
 .stTabs [aria-selected="true"] { background: var(--accent1) !important; color: var(--bg) !important; }
 hr { border-color: var(--border) !important; }
+
+/* ── Readability Analyzer Styles ─────────────────────────────────────── */
+.readability-section {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin: 24px 0;
+}
+.readability-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px; font-weight: 800;
+    color: var(--accent1); margin-bottom: 4px;
+}
+.readability-subtitle {
+    font-size: 11px; color: var(--subtext);
+    margin-bottom: 20px; letter-spacing: 0.5px;
+}
+.audience-card {
+    border-radius: 12px; padding: 18px 20px;
+    margin-bottom: 12px; border: 1px solid var(--border);
+    position: relative; overflow: hidden;
+}
+.audience-card::before {
+    content: ''; position: absolute;
+    left: 0; top: 0; bottom: 0; width: 4px;
+    border-radius: 12px 0 0 12px;
+}
+.audience-card.layman::before   { background: #4CC9F0; }
+.audience-card.student::before  { background: #F77F00; }
+.audience-card.professional::before { background: #E63946; }
+.audience-card .aud-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    margin-bottom: 6px;
+}
+.audience-card.layman   .aud-label { color: #4CC9F0; }
+.audience-card.student  .aud-label { color: #F77F00; }
+.audience-card.professional .aud-label { color: #E63946; }
+.audience-card .aud-pct {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px; font-weight: 800; color: var(--text);
+    line-height: 1;
+}
+.audience-card .aud-desc {
+    font-size: 11px; color: var(--subtext); margin-top: 4px;
+}
+.insight-box {
+    border-radius: 12px; padding: 16px 20px;
+    margin-top: 16px; font-size: 13px; font-weight: 600;
+}
+.insight-box.easy    { background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.3); color: #10B981; }
+.insight-box.medium  { background: rgba(247,127,0,0.12);  border: 1px solid rgba(247,127,0,0.3);  color: #F77F00; }
+.insight-box.hard    { background: rgba(230,57,70,0.12);  border: 1px solid rgba(230,57,70,0.3);  color: #E63946; }
+.word-stat-row {
+    display: flex; gap: 10px; margin-top: 16px;
+}
+.word-stat {
+    flex: 1; background: #0D1320; border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 14px; text-align: center;
+}
+.word-stat .ws-val {
+    font-family: 'Syne', sans-serif; font-size: 20px;
+    font-weight: 800; color: var(--text);
+}
+.word-stat .ws-lbl {
+    font-size: 9px; color: var(--subtext);
+    text-transform: uppercase; letter-spacing: 1px; margin-top: 2px;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -134,6 +206,222 @@ plt.rcParams.update({
     "grid.color": GRID_CLR,      "grid.linestyle": "--",
     "grid.alpha": 0.4,           "font.family": "monospace",
 })
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# DOCUMENT READABILITY ANALYZER — helpers
+# ═══════════════════════════════════════════════════════════════════════════════
+
+def extract_text_from_upload(uploaded_file):
+    """Extract plain text from a .txt or .pdf upload."""
+    name = uploaded_file.name.lower()
+    if name.endswith(".pdf"):
+        try:
+            import pdfplumber
+            uploaded_file.seek(0)
+            with pdfplumber.open(io.BytesIO(uploaded_file.read())) as pdf:
+                return "\n".join(
+                    page.extract_text() or "" for page in pdf.pages
+                )
+        except ImportError:
+            try:
+                import PyPDF2
+                uploaded_file.seek(0)
+                reader = PyPDF2.PdfReader(io.BytesIO(uploaded_file.read()))
+                return "\n".join(
+                    page.extract_text() or "" for page in reader.pages
+                )
+            except ImportError:
+                st.error("📦 Install `pdfplumber` or `PyPDF2` to read PDFs: `pip install pdfplumber`")
+                return ""
+    else:
+        uploaded_file.seek(0)
+        return uploaded_file.read().decode("utf-8", errors="ignore")
+
+
+def tokenize_words(text):
+    """Simple word tokenizer — lowercase alpha tokens only."""
+    return [w.lower() for w in re.findall(r"[a-zA-Z]+", text) if len(w) >= 2]
+
+
+def analyse_document_with_model(raw_text: str, filename: str):
+    """
+    Run the uploaded document text through the REAL trained KNN model pipeline.
+    Uses the same feature_engineering + model_training modules as the main GMM section.
+    Steps:
+      1. Tokenize text → word frequency counter
+      2. filter_words (same filters as pipeline)
+      3. extract_all_features (Zipf, syllables, BERT similarity, WordNet depth ...)
+      4. classify_all_words via trained KNN + zipf fallback
+      5. Return per-category counts and percentages
+    """
+    import tempfile, config, json
+    from feature_engineering import (
+        read_corpus, filter_words, extract_all_features, get_feature_matrix
+    )
+    from model_training import (
+        train_classifier, classify_all_words, auto_validate_labels,
+        create_vocabulary_datasets
+    )
+
+    # Load seed words
+    with open(config.SEED_FILE, encoding="utf-8") as f:
+        seeds = json.load(f)
+
+    # Write text to a temp file so read_corpus() can process it
+    tmpdir = tempfile.mkdtemp()
+    safe_name = re.sub(r"[^\w.]", "_", filename)
+    tmp_path = os.path.join(tmpdir, safe_name if safe_name.endswith(".txt") else safe_name + ".txt")
+    with open(tmp_path, "w", encoding="utf-8") as fout:
+        fout.write(raw_text)
+
+    documents, word_freq = read_corpus(tmpdir)
+    total_tokens = sum(word_freq.values())
+
+    if total_tokens < 20:
+        raise ValueError("Document too short for model analysis (< 20 tokens).")
+
+    # Filter words using same pipeline filters
+    word_freq_filtered = filter_words(
+        word_freq  = word_freq,
+        documents  = documents,
+        seed_words = seeds,
+        min_freq   = 1,                       # relax freq for single-doc analysis
+        min_len    = config.MIN_WORD_LENGTH,
+        sigma      = config.ZIPF_SIGMA_FILTER,
+        cap_ratio  = config.CAP_RATIO_THRESH,
+        min_cap    = config.MIN_CAP_COUNT,
+    )
+
+    if len(word_freq_filtered) < 3:
+        raise ValueError(
+            f"Only {len(word_freq_filtered)} words survived filtering. "
+            "The document may be too short or contain mostly stopwords."
+        )
+
+    # Extract features (includes BERT similarity to seed words)
+    df_feat = extract_all_features(word_freq_filtered, documents, seeds)
+    X, feature_cols = get_feature_matrix(df_feat)
+
+    # Train KNN on seed words (same as main pipeline)
+    clf, scaler, X_scaled, label_map, thresholds = train_classifier(
+        df=df_feat, seed_words=seeds, feature_cols=feature_cols, k=config.KNN_K
+    )
+
+    # Classify all words using KNN + auto zipf fallback
+    labels, probs = classify_all_words(
+        df=df_feat, clf=clf, scaler=scaler, X_scaled=X_scaled,
+        feature_cols=feature_cols, thresholds=thresholds,
+        confidence_threshold=config.CONFIDENCE_THRESHOLD,
+    )
+
+    # Auto-validate labels using seed statistics
+    labels = auto_validate_labels(df_feat, labels, thresholds, sigma=2.0)
+
+    # Count per category
+    total         = len(labels)
+    layman_count  = int((labels == "LAYMAN").sum())
+    student_count = int((labels == "STUDENT").sum())
+    prof_count    = int((labels == "PROFESSIONAL").sum())
+
+    layman_pct  = 100 * layman_count  / max(total, 1)
+    student_pct = 100 * student_count / max(total, 1)
+    prof_pct    = 100 * prof_count    / max(total, 1)
+
+    avg_conf = float(probs.max(axis=1).mean())
+
+    # Sample top words per category for display
+    sample_words = {}
+    for lbl in ["LAYMAN", "STUDENT", "PROFESSIONAL"]:
+        mask = labels == lbl
+        if mask.any():
+            conf_scores = probs[mask].max(axis=1)
+            word_list   = df_feat["word"].values[mask]
+            top_idx     = conf_scores.argsort()[::-1][:8]
+            sample_words[lbl] = list(word_list[top_idx])
+        else:
+            sample_words[lbl] = []
+
+    return {
+        "total":              total,
+        "layman_count":       layman_count,
+        "student_count":      student_count,
+        "professional_count": prof_count,
+        "layman_pct":         layman_pct,
+        "student_pct":        student_pct,
+        "professional_pct":   prof_pct,
+        "avg_confidence":     avg_conf,
+        "sample_words":       sample_words,
+        "model_used":         True,
+    }
+
+
+def compute_flesch_score(text):
+    """Compute Flesch Reading Ease score."""
+    sentences = re.split(r'[.!?]+', text)
+    sentences = [s.strip() for s in sentences if len(s.strip()) > 5]
+    words = tokenize_words(text)
+    if not sentences or not words:
+        return None
+
+    def count_syllables(word):
+        word = word.lower()
+        count = 0
+        vowels = "aeiouy"
+        prev_vowel = False
+        for char in word:
+            is_vowel = char in vowels
+            if is_vowel and not prev_vowel:
+                count += 1
+            prev_vowel = is_vowel
+        if word.endswith("e") and count > 1:
+            count -= 1
+        return max(1, count)
+
+    total_sentences = len(sentences)
+    total_words     = len(words)
+    total_syllables = sum(count_syllables(w) for w in words)
+
+    if total_sentences == 0 or total_words == 0:
+        return None
+
+    asl = total_words / total_sentences          # avg sentence length
+    asw = total_syllables / total_words          # avg syllables per word
+    score = 206.835 - 1.015 * asl - 84.6 * asw
+    return round(max(0, min(100, score)), 1)
+
+
+def flesch_grade_label(score):
+    if score is None:
+        return "N/A", "—"
+    if score >= 90:
+        return "Very Easy", "5th grade"
+    elif score >= 80:
+        return "Easy", "6th grade"
+    elif score >= 70:
+        return "Fairly Easy", "7th grade"
+    elif score >= 60:
+        return "Standard", "8–9th grade"
+    elif score >= 50:
+        return "Fairly Difficult", "High school"
+    elif score >= 30:
+        return "Difficult", "College"
+    else:
+        return "Very Difficult", "Professional"
+
+
+def readability_insight(layman_pct, student_pct, professional_pct):
+    """Return CSS class + message for the insight box."""
+    if layman_pct >= 55:
+        return "easy", "✅ This content is easily understood by a general audience (layman-friendly)."
+    elif layman_pct + student_pct >= 70:
+        return "medium", "📘 This content is well-suited for students and educated readers."
+    elif professional_pct >= 40:
+        return "hard", "⚠️ This content is complex — best suited for professionals or domain experts."
+    elif student_pct >= 50:
+        return "medium", "📘 This content is moderately complex — suitable for college-level readers."
+    else:
+        return "medium", "📊 Mixed complexity — content spans multiple audience levels."
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -161,7 +449,6 @@ def run_pipeline(uploaded_files, n_components=3):
      auto_validate_labels, analyze_clusters,
      create_vocabulary_datasets) = load_pipeline_modules()
 
-    # Load seed words
     seed_file = config.SEED_FILE
     if not os.path.exists(seed_file):
         raise FileNotFoundError(
@@ -170,7 +457,6 @@ def run_pipeline(uploaded_files, n_components=3):
     with open(seed_file, encoding="utf-8") as f:
         seeds = json.load(f)
 
-    # Write uploaded files to a temp directory
     tmpdir = tempfile.mkdtemp()
     for uf in uploaded_files:
         uf.seek(0)
@@ -178,7 +464,6 @@ def run_pipeline(uploaded_files, n_components=3):
         with open(os.path.join(tmpdir, uf.name), "w", encoding="utf-8") as fout:
             fout.write(text)
 
-    # Read corpus from temp dir
     documents, word_freq = read_corpus(tmpdir)
 
     total_tokens = sum(word_freq.values())
@@ -188,7 +473,6 @@ def run_pipeline(uploaded_files, n_components=3):
             "Please upload real documents with at least a few paragraphs."
         )
 
-    # Filter words — all thresholds auto-derived
     word_freq = filter_words(
         word_freq    = word_freq,
         documents    = documents,
@@ -207,41 +491,29 @@ def run_pipeline(uploaded_files, n_components=3):
             "Please upload larger .txt files (ideally 1000+ words each)."
         )
 
-    # Extract features
     df = extract_all_features(word_freq, documents, seeds)
     X, feature_cols = get_feature_matrix(df)
 
-    # Train KNN on seed words
     clf, scaler, X_scaled, label_map, thresholds = train_classifier(
         df=df, seed_words=seeds, feature_cols=feature_cols, k=config.KNN_K
     )
 
-    # Classify all words
     labels, probs = classify_all_words(
         df=df, clf=clf, scaler=scaler, X_scaled=X_scaled,
         feature_cols=feature_cols, thresholds=thresholds,
         confidence_threshold=config.CONFIDENCE_THRESHOLD,
     )
 
-    # Auto-validate
     labels = auto_validate_labels(df, labels, thresholds, sigma=2.0)
-
-    # Cluster stats
     comp_stats = analyze_clusters(df, labels)
 
-    # Build label_map as int→str for compatibility with chart functions
-    # (labels here are already strings like "LAYMAN" etc.)
     unique_labels = sorted(set(labels))
     int_label_map = {i: l for i, l in enumerate(unique_labels)}
-
-    # Convert string labels to int for chart compatibility
     str2int = {l: i for i, l in enumerate(unique_labels)}
     int_labels = np.array([str2int[l] for l in labels])
 
-    # Datasets
     datasets = create_vocabulary_datasets(df, labels, probs)
 
-    # Ensure every dataset is a DataFrame
     for lbl in list(datasets.keys()):
         d = datasets[lbl]
         if not isinstance(d, pd.DataFrame):
@@ -251,8 +523,6 @@ def run_pipeline(uploaded_files, n_components=3):
             else:
                 datasets[lbl] = pd.DataFrame(columns=["word", "confidence"])
 
-    # Create a dummy GMM-like object for AIC/BIC display
-    # (KNN doesn't have AIC/BIC — we compute approximate metrics)
     from sklearn.metrics import silhouette_score
     try:
         sil = silhouette_score(X_scaled, labels)
@@ -435,6 +705,33 @@ def chart_radar(comp_stats, label_map):
     return fig
 
 
+def chart_readability_donut(layman_pct, student_pct, professional_pct):
+    """Donut chart showing audience breakdown."""
+    sizes  = [layman_pct, student_pct, professional_pct]
+    labels = ["LAYMAN", "STUDENT", "PROFESSIONAL"]
+    clrs   = [COLORS[l] for l in labels]
+    # Filter out zero slices for cleaner display
+    filtered = [(s, l, c) for s, l, c in zip(sizes, labels, clrs) if s > 0]
+    if not filtered:
+        return None
+    fsizes, flabels, fclrs = zip(*filtered)
+
+    fig, ax = plt.subplots(figsize=(4.5, 4))
+    wedges, texts, autotexts = ax.pie(
+        fsizes, labels=flabels, colors=fclrs,
+        autopct="%1.1f%%", startangle=90,
+        wedgeprops={"width": 0.55, "edgecolor": DARK_BG, "linewidth": 2},
+        textprops={"color": TEXT_CLR, "fontsize": 9},
+    )
+    for at in autotexts:
+        at.set_color(DARK_BG)
+        at.set_fontsize(9)
+        at.set_fontweight("bold")
+    ax.set_title("Audience Breakdown", fontsize=12, pad=12)
+    fig.tight_layout()
+    return fig
+
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # HEADER
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -528,7 +825,7 @@ with main:
         avg_conf  = max_probs.mean()
         counts    = {l: len(datasets.get(l, [])) for l in LABEL_ORDER}
 
-        # Metric cards
+        # ── Metric cards ──────────────────────────────────────────────────────
         st.markdown(f"""
         <div class="metric-row">
           <div class="metric-card">
@@ -563,10 +860,8 @@ with main:
         </div>
         """, unsafe_allow_html=True)
 
-        # PCA scatter
         st.pyplot(chart_pca(normalized, labels, label_map), use_container_width=True)
 
-        # Bottom row
         c1, c2, c3 = st.columns(3)
         with c1:
             st.markdown('<div class="section-title">Cluster Distribution</div>',
@@ -586,7 +881,6 @@ with main:
             if r:
                 st.pyplot(r, use_container_width=True)
 
-        # Tabs
         st.markdown("---")
         tab1, tab2, tab3, tab4 = st.tabs([
             "📊 Feature Analysis", "📋 Word Explorer",
@@ -687,3 +981,231 @@ with main:
             </div>
         </div>
         """, unsafe_allow_html=True)
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 📄 DOCUMENT READABILITY ANALYZER — uses already-uploaded files from sidebar
+# ═══════════════════════════════════════════════════════════════════════════════
+
+st.markdown("---")
+st.markdown("""
+<div class="readability-section">
+  <div class="readability-title">📄 Document Readability Analyzer</div>
+  <div class="readability-subtitle">
+    USES YOUR TRAINED KNN MODEL (BERT + ZIPF + WORDNET FEATURES) — SAME MODEL AS THE GMM PIPELINE ABOVE
+  </div>
+</div>
+""", unsafe_allow_html=True)
+
+if "ra_results" not in st.session_state:
+    st.session_state.ra_results = None
+
+# ── Auto-run when files are uploaded, or show Analyse button ─────────────────
+if uploaded:
+    # File selector if multiple files uploaded
+    if len(uploaded) > 1:
+        file_names = [f.name for f in uploaded]
+        selected_fname = st.selectbox(
+            "Select file to analyse readability:",
+            file_names,
+            key="ra_file_select",
+        )
+        doc_file = next(f for f in uploaded if f.name == selected_fname)
+    else:
+        doc_file = uploaded[0]
+
+    ra_info_col, ra_btn_col = st.columns([3, 1])
+    with ra_info_col:
+        size_kb = len(doc_file.getvalue()) / 1024
+        st.markdown(f"""
+        <div style="background:#0D1320; border:1px solid #1F2937; border-radius:8px;
+                    padding:10px 16px; font-size:12px; color:#64748B; margin-bottom:8px;">
+            📄 <strong style="color:#E2E8F0;">{doc_file.name}</strong>
+            &nbsp;·&nbsp; {size_kb:.1f} KB
+            &nbsp;·&nbsp; <span style="color:#4CC9F0;">Ready to analyse</span>
+        </div>
+        """, unsafe_allow_html=True)
+    with ra_btn_col:
+        analyze_btn = st.button("🔍  ANALYSE READABILITY", key="analyze_readability")
+
+    if analyze_btn:
+        with st.spinner("🔬 Running your trained KNN model on the document..."):
+            try:
+                raw_text = extract_text_from_upload(doc_file)
+                if not raw_text.strip():
+                    st.error("Could not extract text. Please check the file.")
+                else:
+                    # ── Use the REAL trained KNN model pipeline ──────────────
+                    result = analyse_document_with_model(raw_text, doc_file.name)
+
+                    flesch           = compute_flesch_score(raw_text)
+                    f_label, f_grade = flesch_grade_label(flesch)
+                    ins_cls, ins_msg = readability_insight(
+                        result["layman_pct"],
+                        result["student_pct"],
+                        result["professional_pct"],
+                    )
+
+                    st.session_state.ra_results = {
+                        **result,
+                        "flesch":   flesch,
+                        "f_label":  f_label,
+                        "f_grade":  f_grade,
+                        "ins_cls":  ins_cls,
+                        "ins_msg":  ins_msg,
+                        "raw_text": raw_text,
+                        "filename": doc_file.name,
+                    }
+            except Exception as e:
+                st.error(f"Error during analysis: {e}")
+                with st.expander("Show traceback"):
+                    st.exception(e)
+
+else:
+    # No files uploaded yet
+    st.markdown("""
+    <div style="border: 2px dashed #1F2937; border-radius: 12px;
+                padding: 40px 32px; text-align: center; background: #0D1320; margin-top:8px;">
+        <div style="font-size: 40px; margin-bottom: 10px;">📑</div>
+        <div style="font-family: 'Syne', sans-serif; font-size: 15px;
+                    font-weight: 800; color: #4CC9F0; margin-bottom: 6px;">
+            No Files Uploaded Yet
+        </div>
+        <div style="font-size: 12px; color: #64748B; max-width: 340px; margin: 0 auto;">
+            Upload <strong>.txt</strong> files using the panel on the left —
+            then click <strong>Analyse Readability</strong> to see the audience breakdown.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+# ── Results display ───────────────────────────────────────────────────────────
+if st.session_state.ra_results is not None:
+    R = st.session_state.ra_results
+
+    st.markdown(f"""
+    <div style="background:#0D1320; border:1px solid #1F2937; border-radius:8px;
+                padding:10px 16px; margin:12px 0; font-size:12px; color:#64748B;">
+        ✅ <strong style="color:#10B981;">Analysis complete</strong>
+        &nbsp;·&nbsp; 📄 <strong style="color:#E2E8F0;">{R['filename']}</strong>
+        &nbsp;·&nbsp; {R['total']:,} words analysed
+        &nbsp;·&nbsp; <span style="background:#4CC9F020; color:#4CC9F0; padding:2px 8px;
+                    border-radius:4px; border:1px solid #4CC9F040; font-size:10px; font-weight:700;">
+            🤖 KNN MODEL
+        </span>
+        &nbsp;·&nbsp; <span style="color:#10B981;">avg confidence {R.get('avg_confidence', 0):.1%}</span>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ── Audience cards + donut ────────────────────────────────────────────────
+    card_col, donut_col = st.columns([1.4, 1])
+
+    with card_col:
+        st.markdown(f"""
+        <div class="audience-card layman">
+            <div class="aud-label">👤 Layman</div>
+            <div class="aud-pct">{R['layman_pct']:.1f}%</div>
+            <div class="aud-desc">{R['layman_count']:,} words · general vocabulary</div>
+        </div>
+        <div class="audience-card student">
+            <div class="aud-label">📘 Student</div>
+            <div class="aud-pct">{R['student_pct']:.1f}%</div>
+            <div class="aud-desc">{R['student_count']:,} words · academic / intermediate</div>
+        </div>
+        <div class="audience-card professional">
+            <div class="aud-label">🏛️ Professional</div>
+            <div class="aud-pct">{R['professional_pct']:.1f}%</div>
+            <div class="aud-desc">{R['professional_count']:,} words · domain-specific / expert</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with donut_col:
+        donut = chart_readability_donut(R["layman_pct"], R["student_pct"], R["professional_pct"])
+        if donut:
+            st.pyplot(donut, use_container_width=True)
+
+    # ── Sample words per category ────────────────────────────────────────────
+    sample = R.get("sample_words", {})
+    if any(sample.values()):
+        sw1, sw2, sw3 = st.columns(3)
+        for col, lbl, clr in zip(
+            [sw1, sw2, sw3],
+            ["LAYMAN", "STUDENT", "PROFESSIONAL"],
+            ["#4CC9F0", "#F77F00", "#E63946"]
+        ):
+            with col:
+                words_str = "  ·  ".join(sample.get(lbl, []))
+                col.markdown(f"""
+                <div style="background:#0D1320; border:1px solid #1F2937; border-radius:8px;
+                            padding:10px 14px; min-height:60px;">
+                    <div style="font-size:9px; color:{clr}; font-weight:700;
+                                letter-spacing:1.5px; text-transform:uppercase;
+                                margin-bottom:6px;">{lbl} — top words</div>
+                    <div style="font-size:11px; color:#94A3B8; line-height:1.8;">
+                        {words_str if words_str else "—"}
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+
+    # ── Progress bars ─────────────────────────────────────────────────────────
+    st.markdown('<div class="section-title" style="margin-top:16px;">Understandability Score</div>',
+                unsafe_allow_html=True)
+
+    prog_col1, prog_col2 = st.columns(2)
+    with prog_col1:
+        st.markdown("**👤 Layman**")
+        st.progress(R["layman_pct"] / 100)
+        st.caption(f"{R['layman_pct']:.1f}% of words are layman-level")
+
+        st.markdown("**📘 Student**")
+        st.progress(R["student_pct"] / 100)
+        st.caption(f"{R['student_pct']:.1f}% of words are student-level")
+
+    with prog_col2:
+        st.markdown("**🏛️ Professional**")
+        st.progress(R["professional_pct"] / 100)
+        st.caption(f"{R['professional_pct']:.1f}% of words are professional-level")
+
+        if R["flesch"] is not None:
+            st.markdown("**📖 Flesch Reading Ease**")
+            st.progress(R["flesch"] / 100)
+            st.caption(f"{R['flesch']} — {R['f_label']} ({R['f_grade']})")
+
+    # ── Word stats mini row ───────────────────────────────────────────────────
+    st.markdown(f"""
+    <div class="word-stat-row">
+      <div class="word-stat">
+        <div class="ws-val">{R['total']:,}</div>
+        <div class="ws-lbl">Total Words</div>
+      </div>
+      <div class="word-stat">
+        <div class="ws-val" style="color:#4CC9F0;">{R['layman_count']:,}</div>
+        <div class="ws-lbl">Layman</div>
+      </div>
+      <div class="word-stat">
+        <div class="ws-val" style="color:#F77F00;">{R['student_count']:,}</div>
+        <div class="ws-lbl">Student</div>
+      </div>
+      <div class="word-stat">
+        <div class="ws-val" style="color:#E63946;">{R['professional_count']:,}</div>
+        <div class="ws-lbl">Professional</div>
+      </div>
+      <div class="word-stat">
+        <div class="ws-val">{R['flesch'] if R['flesch'] is not None else 'N/A'}</div>
+        <div class="ws-lbl">Flesch Score</div>
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ── AI Insight box ────────────────────────────────────────────────────────
+    st.markdown(f"""
+    <div class="insight-box {R['ins_cls']}">
+        {R['ins_msg']}
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ── Text preview ──────────────────────────────────────────────────────────
+    with st.expander("📝 View extracted text preview"):
+        preview = R["raw_text"][:2000]
+        if len(R["raw_text"]) > 2000:
+            preview += "\n\n... [truncated — showing first 2000 characters]"
+        st.text_area("Extracted Text", preview, height=200, label_visibility="collapsed")
