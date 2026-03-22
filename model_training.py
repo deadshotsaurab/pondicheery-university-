@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 import pickle
 import os
+from collections import Counter
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import cross_val_score
@@ -17,9 +18,9 @@ from wordfreq import zipf_frequency
 import config
 
 
-# ═══════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════════════
 # AUTO-DERIVED THRESHOLDS FROM SEED WORDS
-# ═══════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════════════
 
 def compute_thresholds_from_seeds(seed_words: dict, df: pd.DataFrame) -> dict:
     """
@@ -46,9 +47,9 @@ def compute_thresholds_from_seeds(seed_words: dict, df: pd.DataFrame) -> dict:
     return thresholds
 
 
-# ═══════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════════════
 # SEED-BASED KNN TRAINING
-# ═══════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════════════
 
 def build_training_data(df: pd.DataFrame,
                         seed_words: dict,
@@ -85,17 +86,19 @@ def train_classifier(df: pd.DataFrame,
     """
     Train KNN classifier on seed words.
     k is the only hyperparameter — comes from config, not hardcoded here.
-    Returns (classifier, scaler, label_map, thresholds).
+    Returns (classifier, scaler, X_scaled, label_map, thresholds).
     """
-    scaler = StandardScaler()
-    X_all  = df[feature_cols].fillna(0).values
+    scaler  = StandardScaler()
+    X_all   = df[feature_cols].fillna(0).values
     X_scaled = scaler.fit_transform(X_all)
 
     # Build scaled training set
     X_train_raw, y_train, label_map = build_training_data(df, seed_words, feature_cols)
     if len(X_train_raw) == 0:
-        raise ValueError("No seed words found in feature DataFrame. "
-                         "Check seed_words.json entries match corpus vocabulary.")
+        raise ValueError(
+            "No seed words found in feature DataFrame. "
+            "Check seed_words.json entries match corpus vocabulary."
+        )
 
     X_train = scaler.transform(X_train_raw)
 
@@ -103,17 +106,23 @@ def train_classifier(df: pd.DataFrame,
     effective_k = min(k, len(X_train))
 
     clf = KNeighborsClassifier(
-        n_neighbors  = effective_k,
-        metric       = "euclidean",
-        weights      = "distance",    # closer seeds have more influence
+        n_neighbors = effective_k,
+        metric      = "euclidean",
+        weights     = "distance",    # closer seeds have more influence
     )
     clf.fit(X_train, y_train)
 
-    # Cross-validation on seed words
-    if len(X_train) >= 5:
-        cv_k   = min(5, len(X_train))
-        scores = cross_val_score(clf, X_train, y_train, cv=cv_k)
-        print(f"Seed cross-validation accuracy: {scores.mean()*100:.1f}%")
+    # ── Cross-validation (FIXED: cv cannot exceed min class size) ────────────
+    try:
+        min_class_size = min(Counter(y_train).values())
+        cv_k = min(5, len(X_train), min_class_size)
+        if cv_k >= 2:
+            scores = cross_val_score(clf, X_train, y_train, cv=cv_k)
+            print(f"Seed cross-validation accuracy: {scores.mean()*100:.1f}%")
+        else:
+            print("Skipping cross-validation: not enough samples per class.")
+    except Exception as e:
+        print(f"Cross-validation skipped: {e}")
 
     # Compute auto-derived thresholds for fallback
     thresholds = compute_thresholds_from_seeds(seed_words, df)
@@ -121,9 +130,9 @@ def train_classifier(df: pd.DataFrame,
     return clf, scaler, X_scaled, label_map, thresholds
 
 
-# ═══════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════════════
 # AUTO-DERIVED ZIPF FALLBACK
-# ═══════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════════════
 
 def _get_zipf_boundaries(thresholds: dict) -> tuple:
     """
@@ -140,8 +149,8 @@ def _get_zipf_boundaries(thresholds: dict) -> tuple:
     if len(means) < 2:
         return 4.0, 3.0   # only used if seeds are missing
 
-    layman_mean = means.get("LAYMAN", 5.0)
-    student_mean = means.get("STUDENT", 4.0)
+    layman_mean  = means.get("LAYMAN",       5.0)
+    student_mean = means.get("STUDENT",      4.0)
     prof_mean    = means.get("PROFESSIONAL", 2.5)
 
     # Midpoints between adjacent group means
@@ -151,9 +160,9 @@ def _get_zipf_boundaries(thresholds: dict) -> tuple:
     return boundary_LS, boundary_SP
 
 
-# ═══════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════════════
 # CLASSIFY ALL WORDS
-# ═══════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════════════
 
 def classify_all_words(df: pd.DataFrame,
                        clf: KNeighborsClassifier,
@@ -165,17 +174,18 @@ def classify_all_words(df: pd.DataFrame,
     """
     Classify every word.
     High-confidence → KNN label.
-    Low-confidence → auto-derived zipf-boundary fallback.
+    Low-confidence  → auto-derived zipf-boundary fallback.
     Returns (labels_array, probs_array).
     """
-    probs  = clf.predict_proba(X_scaled)
-    labels = clf.predict(X_scaled)
+    probs    = clf.predict_proba(X_scaled)
+    labels   = clf.predict(X_scaled)
     max_conf = probs.max(axis=1)
 
     # Auto-derived zipf boundaries (from seed distributions)
     boundary_LS, boundary_SP = _get_zipf_boundaries(thresholds)
     print(f"  Auto zipf boundaries (seed-derived): "
-          f"LAYMAN≥{boundary_LS:.2f} | STUDENT≥{boundary_SP:.2f} | PROFESSIONAL<{boundary_SP:.2f}")
+          f"LAYMAN≥{boundary_LS:.2f} | STUDENT≥{boundary_SP:.2f} | "
+          f"PROFESSIONAL<{boundary_SP:.2f}")
 
     fallback_count = 0
     if "zipf_score" in df.columns:
@@ -194,9 +204,9 @@ def classify_all_words(df: pd.DataFrame,
     return labels, probs
 
 
-# ═══════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════════════
 # AUTO-VALIDATION USING SEED STATISTICS
-# ═══════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════════════
 
 def auto_validate_labels(df: pd.DataFrame,
                          labels: np.ndarray,
@@ -215,7 +225,7 @@ def auto_validate_labels(df: pd.DataFrame,
     if not thresholds:
         return labels
 
-    labels = labels.copy()
+    labels     = labels.copy()
     reassigned = 0
 
     for i, (_, row) in enumerate(df.iterrows()):
@@ -247,37 +257,35 @@ def auto_validate_labels(df: pd.DataFrame,
                     best_lbl = lbl
 
             if best_lbl != assigned:
-                labels[i] = best_lbl
+                labels[i]  = best_lbl
                 reassigned += 1
 
     print(f"  Auto-validator: {reassigned} words re-assigned")
     return labels
 
 
-# ═══════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════════════
 # VOCABULARY DATASETS
-# ═══════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════════════
 
 def create_vocabulary_datasets(df: pd.DataFrame,
                                labels: np.ndarray,
                                probs: np.ndarray) -> dict:
     """Return {LABEL: DataFrame} sorted by confidence descending."""
-    datasets = {}
+    datasets     = {}
     label_classes = sorted(set(labels))
 
     for lbl in label_classes:
         idx  = np.where(labels == lbl)[0]
         rows = []
-        cls_list = list(labels) if hasattr(labels, '__iter__') else labels.tolist()
-        class_names = getattr(probs, 'classes_', label_classes)
 
         for i in idx:
-            row = df.iloc[i].to_dict()
+            row             = df.iloc[i].to_dict()
             row["confidence"] = float(probs[i].max())
             row["label"]      = lbl
             rows.append(row)
 
-        out = pd.DataFrame(rows).sort_values("confidence", ascending=False)
+        out           = pd.DataFrame(rows).sort_values("confidence", ascending=False)
         datasets[lbl] = out
 
     return datasets
@@ -291,9 +299,9 @@ def save_vocabulary_datasets(datasets: dict, output_dir: str):
     print("Vocabulary datasets saved.")
 
 
-# ═══════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════════════
 # CLUSTER STATS
-# ═══════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════════════
 
 def analyze_clusters(df: pd.DataFrame, labels: np.ndarray) -> dict:
     stats = {}
@@ -310,16 +318,19 @@ def analyze_clusters(df: pd.DataFrame, labels: np.ndarray) -> dict:
     return stats
 
 
-# ═══════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════════════
 # SAVE / LOAD MODEL
-# ═══════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════════════
 
 def save_model(clf, scaler, thresholds, feature_cols, output_dir: str):
     os.makedirs(output_dir, exist_ok=True)
     with open(os.path.join(output_dir, "classifier.pkl"), "wb") as f:
-        pickle.dump({"clf": clf, "scaler": scaler,
-                     "thresholds": thresholds,
-                     "feature_cols": feature_cols}, f)
+        pickle.dump({
+            "clf":          clf,
+            "scaler":       scaler,
+            "thresholds":   thresholds,
+            "feature_cols": feature_cols,
+        }, f)
     print("Model saved successfully.")
 
 
