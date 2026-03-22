@@ -1,0 +1,15 @@
+streamlit
+numpy
+pandas
+scikit-learn
+matplotlib
+seaborn
+wordfreq
+nltk
+pyphen
+transformers
+torch
+pdfplumber
+PyPDF2
+scipy
+sentence-transformers

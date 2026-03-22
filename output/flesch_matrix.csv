@@ -1,0 +1,51 @@
+case_num,case_id,flesch_orig_judgement,flesch_ground_truth,flesch_locknkey,level_orig_judgement,level_ground_truth,level_locknkey
+1,1953_L_1,45.9238,44.7036,45.3126,Difficult,Difficult,Difficult
+2,1953_S_23,50.7857,50.7265,52.0377,Standard,Standard,Standard
+3,1954_M_25,40.2748,44.5939,44.8154,Difficult,Difficult,Difficult
+4,1963_S_59,49.0328,63.6693,63.8138,Difficult,Standard,Standard
+5,1971_S_1,45.1755,47.3809,50.7931,Difficult,Difficult,Standard
+6,1973_S_68,42.49,44.4086,46.0211,Difficult,Difficult,Difficult
+7,1976_T_9,43.3691,50.0658,46.4629,Difficult,Standard,Difficult
+8,1977_P_19,31.2156,25.1821,26.0352,Difficult,Very Difficult,Very Difficult
+9,1978_M_13,11.5253,17.621,21.3423,Very Difficult,Very Difficult,Very Difficult
+10,1980_W_3,39.5475,37.8196,37.9408,Difficult,Difficult,Difficult
+11,1987_C_108,36.6074,42.4115,42.2639,Difficult,Difficult,Difficult
+12,1987_M_123,45.3556,43.7459,43.7357,Difficult,Difficult,Difficult
+13,1987_S_26,51.8395,53.7629,51.1457,Standard,Standard,Standard
+14,1989_A_55,39.9801,38.5989,39.5514,Difficult,Difficult,Difficult
+15,1994_M_69,35.8272,37.8441,38.4214,Difficult,Difficult,Difficult
+16,1994_S_246,39.6244,31.401,31.8952,Difficult,Difficult,Difficult
+17,1995_S_317,41.6826,45.643,44.0456,Difficult,Difficult,Difficult
+18,1996_B_72,27.8362,30.732,30.999,Very Difficult,Difficult,Difficult
+19,1996_T_169,40.074,41.3227,37.5095,Difficult,Difficult,Difficult
+20,2000_C_151,34.0361,27.2228,27.5978,Difficult,Very Difficult,Very Difficult
+21,2000_V_80,38.4504,26.8827,31.9559,Difficult,Very Difficult,Difficult
+22,2001_A_234,37.5434,38.1907,38.1691,Difficult,Difficult,Difficult
+23,2001_S_1131,50.6566,46.559,47.5753,Standard,Difficult,Difficult
+24,2004_C_129,43.1303,39.5825,38.7554,Difficult,Difficult,Difficult
+25,2004_I_24,48.6244,50.075,48.7745,Difficult,Standard,Difficult
+26,2005_S_388,41.4737,39.8812,40.1739,Difficult,Difficult,Difficult
+27,2006_A_136,43.1102,47.5729,47.2354,Difficult,Difficult,Difficult
+28,2006_A_36,40.6737,47.1773,37.1935,Difficult,Difficult,Difficult
+29,2007_B_76,37.2734,45.1722,44.3949,Difficult,Difficult,Difficult
+30,2007_C_121,49.5278,39.5952,38.5825,Difficult,Difficult,Difficult
+31,2007_S_608,47.7635,47.2194,48.6854,Difficult,Difficult,Difficult
+32,2007_S_632,46.5323,41.81,43.8697,Difficult,Difficult,Difficult
+33,2007_U_18,45.3818,49.7061,49.7831,Difficult,Difficult,Difficult
+34,2008_A_260,40.3173,36.0661,36.4044,Difficult,Difficult,Difficult
+35,2008_C_166,43.9346,48.6392,42.3475,Difficult,Difficult,Difficult
+36,2008_I_54,41.6749,42.9178,40.9606,Difficult,Difficult,Difficult
+37,2008_P_8,48.2732,50.1422,51.4719,Difficult,Standard,Standard
+38,2008_S_1411,44.5269,46.0669,37.0854,Difficult,Difficult,Difficult
+39,2008_S_549,36.1782,25.8366,27.1898,Difficult,Very Difficult,Very Difficult
+40,2009_B_16,40.892,40.5734,41.0868,Difficult,Difficult,Difficult
+41,2009_S_146,49.1785,52.2528,62.1169,Difficult,Standard,Standard
+42,2010_J_55,36.5037,38.816,38.816,Difficult,Difficult,Difficult
+43,2010_S_431,42.9338,48.7637,41.3702,Difficult,Difficult,Difficult
+44,2011_I_16,43.4872,37.7761,37.1953,Difficult,Difficult,Difficult
+45,2011_S_308,40.0181,39.8194,37.2501,Difficult,Difficult,Difficult
+46,2012_S_270,52.8715,51.24,52.4804,Standard,Standard,Standard
+47,2014_J_33,47.001,51.0188,46.0319,Difficult,Standard,Difficult
+48,2014_R_41,50.8002,54.7908,54.8349,Standard,Standard,Standard
+49,2015_J_10,45.8102,49.7205,49.4295,Difficult,Difficult,Difficult
+50,2015_S_368,32.4041,31.1355,31.7691,Difficult,Difficult,Difficult

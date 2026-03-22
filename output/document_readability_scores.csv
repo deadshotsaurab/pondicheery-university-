@@ -1,0 +1,151 @@
+case_id,source_type,file_name,total_words,avg_difficulty_score,layman_%,student_%,professional_%,readability_level
+1953_L_1,IN-Ext_judgement,data\IN-Ext_judgement\1953_L_1.txt,5131,0.783,21.85,16.23,8.01,EASY
+1953_S_23,IN-Ext_judgement,data\IN-Ext_judgement\1953_S_23.txt,3327,0.91,17.49,20.32,10.97,EASY
+1954_M_25,IN-Ext_judgement,data\IN-Ext_judgement\1954_M_25.txt,3512,0.826,20.42,21.44,6.44,EASY
+1963_S_59,IN-Ext_judgement,data\IN-Ext_judgement\1963_S_59.txt,15106,0.759,20.97,19.52,5.3,EASY
+1971_S_1,IN-Ext_judgement,data\IN-Ext_judgement\1971_S_1.txt,6463,0.785,18.27,19.68,6.96,EASY
+1973_S_68,IN-Ext_judgement,data\IN-Ext_judgement\1973_S_68.txt,4900,0.775,19.57,16.49,8.31,EASY
+1976_T_9,IN-Ext_judgement,data\IN-Ext_judgement\1976_T_9.txt,3746,0.81,20.96,18.95,7.37,EASY
+1977_P_19,IN-Ext_judgement,data\IN-Ext_judgement\1977_P_19.txt,3579,0.788,25.85,18.69,5.2,EASY
+1978_M_13,IN-Ext_judgement,data\IN-Ext_judgement\1978_M_13.txt,4636,0.866,20.23,20.23,8.63,EASY
+1980_W_3,IN-Ext_judgement,data\IN-Ext_judgement\1980_W_3.txt,6118,0.817,19.27,21.95,6.16,EASY
+1987_C_108,IN-Ext_judgement,data\IN-Ext_judgement\1987_C_108.txt,13145,0.833,22.67,20.56,6.5,EASY
+1987_M_123,IN-Ext_judgement,data\IN-Ext_judgement\1987_M_123.txt,4317,0.861,19.3,20.73,8.45,EASY
+1987_S_26,IN-Ext_judgement,data\IN-Ext_judgement\1987_S_26.txt,5195,0.799,21.23,18.46,7.24,EASY
+1989_A_55,IN-Ext_judgement,data\IN-Ext_judgement\1989_A_55.txt,3577,0.859,19.21,21.67,7.8,EASY
+1994_M_69,IN-Ext_judgement,data\IN-Ext_judgement\1994_M_69.txt,5184,0.794,18.98,20.6,6.4,EASY
+1994_S_246,IN-Ext_judgement,data\IN-Ext_judgement\1994_S_246.txt,4289,0.881,18.93,22.22,8.23,EASY
+1995_S_317,IN-Ext_judgement,data\IN-Ext_judgement\1995_S_317.txt,4792,0.876,17.59,21.49,9.02,EASY
+1996_B_72,IN-Ext_judgement,data\IN-Ext_judgement\1996_B_72.txt,4003,0.907,20.91,17.59,11.54,EASY
+1996_T_169,IN-Ext_judgement,data\IN-Ext_judgement\1996_T_169.txt,4012,0.822,23.63,18.57,7.13,EASY
+2000_C_151,IN-Ext_judgement,data\IN-Ext_judgement\2000_C_151.txt,5517,0.855,21.95,22.44,6.22,EASY
+2000_V_80,IN-Ext_judgement,data\IN-Ext_judgement\2000_V_80.txt,3508,0.84,20.44,18.76,8.69,EASY
+2001_A_234,IN-Ext_judgement,data\IN-Ext_judgement\2001_A_234.txt,5480,0.853,18.43,19.82,9.07,EASY
+2001_S_1131,IN-Ext_judgement,data\IN-Ext_judgement\2001_S_1131.txt,3940,0.822,20.99,18.48,8.07,EASY
+2004_C_129,IN-Ext_judgement,data\IN-Ext_judgement\2004_C_129.txt,4773,0.829,21.16,20.66,6.81,EASY
+2004_I_24,IN-Ext_judgement,data\IN-Ext_judgement\2004_I_24.txt,5680,0.85,20.79,20.14,7.98,EASY
+2005_S_388,IN-Ext_judgement,data\IN-Ext_judgement\2005_S_388.txt,3338,0.853,20.46,22.47,6.62,EASY
+2006_A_136,IN-Ext_judgement,data\IN-Ext_judgement\2006_A_136.txt,10149,0.885,21.14,20.2,8.99,EASY
+2006_A_36,IN-Ext_judgement,data\IN-Ext_judgement\2006_A_36.txt,3687,0.896,19.37,21.07,9.36,EASY
+2007_B_76,IN-Ext_judgement,data\IN-Ext_judgement\2007_B_76.txt,3923,0.907,19.88,22.84,8.39,EASY
+2007_C_121,IN-Ext_judgement,data\IN-Ext_judgement\2007_C_121.txt,5466,0.836,21.88,19.48,7.57,EASY
+2007_S_608,IN-Ext_judgement,data\IN-Ext_judgement\2007_S_608.txt,2881,0.812,21.03,16.97,8.75,EASY
+2007_S_632,IN-Ext_judgement,data\IN-Ext_judgement\2007_S_632.txt,3990,0.854,19.12,21.1,8.02,EASY
+2007_U_18,IN-Ext_judgement,data\IN-Ext_judgement\2007_U_18.txt,4874,0.856,20.43,18.51,9.4,EASY
+2008_A_260,IN-Ext_judgement,data\IN-Ext_judgement\2008_A_260.txt,5018,0.809,21.36,22.2,5.06,EASY
+2008_C_166,IN-Ext_judgement,data\IN-Ext_judgement\2008_C_166.txt,4049,0.897,21.24,20.7,9.01,EASY
+2008_I_54,IN-Ext_judgement,data\IN-Ext_judgement\2008_I_54.txt,3904,0.807,19.44,21.08,6.35,EASY
+2008_P_8,IN-Ext_judgement,data\IN-Ext_judgement\2008_P_8.txt,5420,0.856,22.16,18.86,8.56,EASY
+2008_S_1411,IN-Ext_judgement,data\IN-Ext_judgement\2008_S_1411.txt,6162,0.859,20.04,21.08,7.89,EASY
+2008_S_549,IN-Ext_judgement,data\IN-Ext_judgement\2008_S_549.txt,4011,0.799,20.69,15.53,9.37,EASY
+2009_B_16,IN-Ext_judgement,data\IN-Ext_judgement\2009_B_16.txt,4545,0.875,20.88,20.99,8.23,EASY
+2009_S_146,IN-Ext_judgement,data\IN-Ext_judgement\2009_S_146.txt,8050,0.795,21.66,18.68,6.82,EASY
+2010_J_55,IN-Ext_judgement,data\IN-Ext_judgement\2010_J_55.txt,6122,0.899,20.91,19.37,10.08,EASY
+2010_S_431,IN-Ext_judgement,data\IN-Ext_judgement\2010_S_431.txt,4231,0.805,19.26,18.34,8.18,EASY
+2011_I_16,IN-Ext_judgement,data\IN-Ext_judgement\2011_I_16.txt,5709,0.883,20.07,20.16,9.3,EASY
+2011_S_308,IN-Ext_judgement,data\IN-Ext_judgement\2011_S_308.txt,3110,0.865,22.51,19.42,8.39,EASY
+2012_S_270,IN-Ext_judgement,data\IN-Ext_judgement\2012_S_270.txt,4102,0.794,20.4,18.48,7.34,EASY
+2014_J_33,IN-Ext_judgement,data\IN-Ext_judgement\2014_J_33.txt,3433,0.954,22.52,21.03,10.28,EASY
+2014_R_41,IN-Ext_judgement,data\IN-Ext_judgement\2014_R_41.txt,3131,0.915,18.43,19.61,11.27,EASY
+2015_J_10,IN-Ext_judgement,data\IN-Ext_judgement\2015_J_10.txt,2666,1.04,17.03,23.52,13.32,EASY
+2015_S_368,IN-Ext_judgement,data\IN-Ext_judgement\2015_S_368.txt,4682,0.94,19.2,22.83,9.72,EASY
+1953_L_1,A1_Ground truth,data\A1_Ground truth\1953_L_1.txt,1292,0.856,21.13,18.19,9.37,EASY
+1953_S_23,A1_Ground truth,data\A1_Ground truth\1953_S_23.txt,675,1.034,14.81,20.3,16.0,EASY
+1954_M_25,A1_Ground truth,data\A1_Ground truth\1954_M_25.txt,1221,0.883,20.64,21.54,8.19,EASY
+1963_S_59,A1_Ground truth,data\A1_Ground truth\1963_S_59.txt,4459,0.773,22.36,18.55,5.97,EASY
+1971_S_1,A1_Ground truth,data\A1_Ground truth\1971_S_1.txt,1146,0.826,18.67,21.12,7.24,EASY
+1973_S_68,A1_Ground truth,data\A1_Ground truth\1973_S_68.txt,1310,0.88,17.79,18.17,11.3,EASY
+1976_T_9,A1_Ground truth,data\A1_Ground truth\1976_T_9.txt,987,0.87,20.87,19.25,9.22,EASY
+1977_P_19,A1_Ground truth,data\A1_Ground truth\1977_P_19.txt,1256,0.881,24.6,20.38,7.56,EASY
+1978_M_13,A1_Ground truth,data\A1_Ground truth\1978_M_13.txt,1985,0.885,19.7,20.55,9.22,EASY
+1980_W_3,A1_Ground truth,data\A1_Ground truth\1980_W_3.txt,1842,0.879,18.73,23.18,7.6,EASY
+1987_C_108,A1_Ground truth,data\A1_Ground truth\1987_C_108.txt,2266,0.856,24.05,20.79,6.66,EASY
+1987_M_123,A1_Ground truth,data\A1_Ground truth\1987_M_123.txt,1487,0.869,20.58,21.65,7.67,EASY
+1987_S_26,A1_Ground truth,data\A1_Ground truth\1987_S_26.txt,1324,0.835,22.21,18.88,7.85,EASY
+1989_A_55,A1_Ground truth,data\A1_Ground truth\1989_A_55.txt,919,0.856,20.24,22.09,7.07,EASY
+1994_M_69,A1_Ground truth,data\A1_Ground truth\1994_M_69.txt,1802,0.834,19.59,20.92,7.33,EASY
+1994_S_246,A1_Ground truth,data\A1_Ground truth\1994_S_246.txt,1397,0.956,16.89,25.7,9.09,EASY
+1995_S_317,A1_Ground truth,data\A1_Ground truth\1995_S_317.txt,1583,0.985,17.18,22.36,12.19,EASY
+1996_B_72,A1_Ground truth,data\A1_Ground truth\1996_B_72.txt,1442,0.936,21.64,16.02,13.31,EASY
+1996_T_169,A1_Ground truth,data\A1_Ground truth\1996_T_169.txt,1604,0.87,23.94,20.95,7.04,EASY
+2000_C_151,A1_Ground truth,data\A1_Ground truth\2000_C_151.txt,1932,0.895,21.64,22.98,7.3,EASY
+2000_V_80,A1_Ground truth,data\A1_Ground truth\2000_V_80.txt,1370,0.896,18.76,20.22,10.15,EASY
+2001_A_234,A1_Ground truth,data\A1_Ground truth\2001_A_234.txt,1525,0.866,16.66,19.41,10.36,EASY
+2001_S_1131,A1_Ground truth,data\A1_Ground truth\2001_S_1131.txt,1339,0.885,21.28,17.7,10.6,EASY
+2004_C_129,A1_Ground truth,data\A1_Ground truth\2004_C_129.txt,1694,0.858,21.61,22.02,6.73,EASY
+2004_I_24,A1_Ground truth,data\A1_Ground truth\2004_I_24.txt,1331,0.918,20.74,23.59,7.96,EASY
+2005_S_388,A1_Ground truth,data\A1_Ground truth\2005_S_388.txt,1155,0.913,22.25,22.94,7.71,EASY
+2006_A_136,A1_Ground truth,data\A1_Ground truth\2006_A_136.txt,2692,0.906,19.91,21.58,9.18,EASY
+2006_A_36,A1_Ground truth,data\A1_Ground truth\2006_A_36.txt,1215,0.933,20.74,22.47,9.22,EASY
+2007_B_76,A1_Ground truth,data\A1_Ground truth\2007_B_76.txt,1538,0.912,24.77,21.2,8.0,EASY
+2007_C_121,A1_Ground truth,data\A1_Ground truth\2007_C_121.txt,1913,0.926,21.17,18.77,11.29,EASY
+2007_S_608,A1_Ground truth,data\A1_Ground truth\2007_S_608.txt,974,0.831,21.97,17.76,8.52,EASY
+2007_S_632,A1_Ground truth,data\A1_Ground truth\2007_S_632.txt,1163,0.863,20.38,21.75,7.48,EASY
+2007_U_18,A1_Ground truth,data\A1_Ground truth\2007_U_18.txt,1293,0.859,21.27,18.64,9.13,EASY
+2008_A_260,A1_Ground truth,data\A1_Ground truth\2008_A_260.txt,1625,0.914,23.32,24.18,6.58,EASY
+2008_C_166,A1_Ground truth,data\A1_Ground truth\2008_C_166.txt,735,0.922,21.09,21.09,9.66,EASY
+2008_I_54,A1_Ground truth,data\A1_Ground truth\2008_I_54.txt,1124,0.842,21.53,21.17,6.76,EASY
+2008_P_8,A1_Ground truth,data\A1_Ground truth\2008_P_8.txt,1284,0.898,22.04,20.56,8.88,EASY
+2008_S_1411,A1_Ground truth,data\A1_Ground truth\2008_S_1411.txt,1676,0.93,22.14,20.47,9.96,EASY
+2008_S_549,A1_Ground truth,data\A1_Ground truth\2008_S_549.txt,1131,0.836,22.19,16.62,9.37,EASY
+2009_B_16,A1_Ground truth,data\A1_Ground truth\2009_B_16.txt,1574,0.999,19.82,23.82,10.8,EASY
+2009_S_146,A1_Ground truth,data\A1_Ground truth\2009_S_146.txt,1719,0.848,21.87,20.01,7.62,EASY
+2010_J_55,A1_Ground truth,data\A1_Ground truth\2010_J_55.txt,1722,0.949,23.17,19.22,11.09,EASY
+2010_S_431,A1_Ground truth,data\A1_Ground truth\2010_S_431.txt,1152,0.832,16.84,19.53,9.11,EASY
+2011_I_16,A1_Ground truth,data\A1_Ground truth\2011_I_16.txt,2034,0.897,21.88,21.39,8.36,EASY
+2011_S_308,A1_Ground truth,data\A1_Ground truth\2011_S_308.txt,1087,0.938,23.92,18.68,10.86,EASY
+2012_S_270,A1_Ground truth,data\A1_Ground truth\2012_S_270.txt,1345,0.851,20.45,20.3,8.03,EASY
+2014_J_33,A1_Ground truth,data\A1_Ground truth\2014_J_33.txt,1037,0.926,24.11,19.48,9.84,EASY
+2014_R_41,A1_Ground truth,data\A1_Ground truth\2014_R_41.txt,1091,0.898,17.51,21.45,9.81,EASY
+2015_J_10,A1_Ground truth,data\A1_Ground truth\2015_J_10.txt,1085,1.1,15.67,24.33,15.21,EASY
+2015_S_368,A1_Ground truth,data\A1_Ground truth\2015_S_368.txt,1417,1.031,20.25,24.06,11.57,EASY
+1953_L_1,A2_LocknKey,data\A2_LocknKey\1953_L_1.txt,1319,0.873,21.08,18.8,9.55,EASY
+1953_S_23,A2_LocknKey,data\A2_LocknKey\1953_S_23.txt,734,1.004,15.67,19.89,14.99,EASY
+1954_M_25,A2_LocknKey,data\A2_LocknKey\1954_M_25.txt,1270,0.873,20.0,21.73,7.95,EASY
+1963_S_59,A2_LocknKey,data\A2_LocknKey\1963_S_59.txt,4912,0.773,22.68,18.02,6.19,EASY
+1971_S_1,A2_LocknKey,data\A2_LocknKey\1971_S_1.txt,1165,0.815,18.88,21.12,6.78,EASY
+1973_S_68,A2_LocknKey,data\A2_LocknKey\1973_S_68.txt,1550,0.874,17.74,19.03,10.52,EASY
+1976_T_9,A2_LocknKey,data\A2_LocknKey\1976_T_9.txt,952,0.909,20.48,19.75,10.29,EASY
+1977_P_19,A2_LocknKey,data\A2_LocknKey\1977_P_19.txt,1290,0.873,24.88,19.92,7.52,EASY
+1978_M_13,A2_LocknKey,data\A2_LocknKey\1978_M_13.txt,1780,0.894,19.21,20.28,9.89,EASY
+1980_W_3,A2_LocknKey,data\A2_LocknKey\1980_W_3.txt,1968,0.886,18.8,23.48,7.62,EASY
+1987_C_108,A2_LocknKey,data\A2_LocknKey\1987_C_108.txt,2050,0.868,23.95,20.73,7.12,EASY
+1987_M_123,A2_LocknKey,data\A2_LocknKey\1987_M_123.txt,1613,0.859,21.02,21.02,7.63,EASY
+1987_S_26,A2_LocknKey,data\A2_LocknKey\1987_S_26.txt,1327,0.813,22.16,19.07,7.01,EASY
+1989_A_55,A2_LocknKey,data\A2_LocknKey\1989_A_55.txt,950,0.858,20.21,22.21,7.05,EASY
+1994_M_69,A2_LocknKey,data\A2_LocknKey\1994_M_69.txt,1474,0.824,19.34,19.81,7.8,EASY
+1994_S_246,A2_LocknKey,data\A2_LocknKey\1994_S_246.txt,1387,0.943,16.44,24.87,9.37,EASY
+1995_S_317,A2_LocknKey,data\A2_LocknKey\1995_S_317.txt,1383,0.952,16.78,23.07,10.77,EASY
+1996_B_72,A2_LocknKey,data\A2_LocknKey\1996_B_72.txt,1553,0.939,21.76,16.16,13.26,EASY
+1996_T_169,A2_LocknKey,data\A2_LocknKey\1996_T_169.txt,1395,0.865,23.23,20.57,7.38,EASY
+2000_C_151,A2_LocknKey,data\A2_LocknKey\2000_C_151.txt,1956,0.888,21.37,23.98,6.49,EASY
+2000_V_80,A2_LocknKey,data\A2_LocknKey\2000_V_80.txt,1312,0.884,19.51,20.27,9.45,EASY
+2001_A_234,A2_LocknKey,data\A2_LocknKey\2001_A_234.txt,1640,0.875,16.65,19.33,10.73,EASY
+2001_S_1131,A2_LocknKey,data\A2_LocknKey\2001_S_1131.txt,1222,0.87,22.59,18.58,9.08,EASY
+2004_C_129,A2_LocknKey,data\A2_LocknKey\2004_C_129.txt,1883,0.871,21.46,22.15,7.12,EASY
+2004_I_24,A2_LocknKey,data\A2_LocknKey\2004_I_24.txt,1401,0.887,20.49,23.84,6.85,EASY
+2005_S_388,A2_LocknKey,data\A2_LocknKey\2005_S_388.txt,1205,0.918,21.91,22.74,8.13,EASY
+2006_A_136,A2_LocknKey,data\A2_LocknKey\2006_A_136.txt,2768,0.908,19.98,21.57,9.21,EASY
+2006_A_36,A2_LocknKey,data\A2_LocknKey\2006_A_36.txt,1149,0.945,20.02,22.89,9.57,EASY
+2007_B_76,A2_LocknKey,data\A2_LocknKey\2007_B_76.txt,1146,0.914,25.04,21.38,7.85,EASY
+2007_C_121,A2_LocknKey,data\A2_LocknKey\2007_C_121.txt,2027,0.926,20.87,19.63,10.8,EASY
+2007_S_608,A2_LocknKey,data\A2_LocknKey\2007_S_608.txt,1012,0.833,22.23,18.38,8.1,EASY
+2007_S_632,A2_LocknKey,data\A2_LocknKey\2007_S_632.txt,1263,0.867,20.19,22.33,7.28,EASY
+2007_U_18,A2_LocknKey,data\A2_LocknKey\2007_U_18.txt,1327,0.877,21.4,18.91,9.5,EASY
+2008_A_260,A2_LocknKey,data\A2_LocknKey\2008_A_260.txt,1648,0.91,23.48,24.03,6.49,EASY
+2008_C_166,A2_LocknKey,data\A2_LocknKey\2008_C_166.txt,847,0.983,19.24,21.13,12.28,EASY
+2008_I_54,A2_LocknKey,data\A2_LocknKey\2008_I_54.txt,1208,0.844,21.36,21.44,6.71,EASY
+2008_P_8,A2_LocknKey,data\A2_LocknKey\2008_P_8.txt,1653,0.889,23.9,19.18,8.89,EASY
+2008_S_1411,A2_LocknKey,data\A2_LocknKey\2008_S_1411.txt,2022,0.898,21.71,21.56,8.31,EASY
+2008_S_549,A2_LocknKey,data\A2_LocknKey\2008_S_549.txt,1249,0.842,21.94,16.49,9.77,EASY
+2009_B_16,A2_LocknKey,data\A2_LocknKey\2009_B_16.txt,1614,1.002,19.7,23.98,10.84,EASY
+2009_S_146,A2_LocknKey,data\A2_LocknKey\2009_S_146.txt,2871,0.807,21.84,17.69,7.84,EASY
+2010_J_55,A2_LocknKey,data\A2_LocknKey\2010_J_55.txt,1722,0.949,23.17,19.22,11.09,EASY
+2010_S_431,A2_LocknKey,data\A2_LocknKey\2010_S_431.txt,1373,0.846,18.65,17.33,10.42,EASY
+2011_I_16,A2_LocknKey,data\A2_LocknKey\2011_I_16.txt,2035,0.897,21.87,21.38,8.35,EASY
+2011_S_308,A2_LocknKey,data\A2_LocknKey\2011_S_308.txt,1163,0.93,24.51,21.75,8.34,EASY
+2012_S_270,A2_LocknKey,data\A2_LocknKey\2012_S_270.txt,1534,0.838,21.12,19.23,8.08,EASY
+2014_J_33,A2_LocknKey,data\A2_LocknKey\2014_J_33.txt,1071,0.98,25.21,19.89,11.02,EASY
+2014_R_41,A2_LocknKey,data\A2_LocknKey\2014_R_41.txt,1167,0.904,17.57,20.99,10.28,EASY
+2015_J_10,A2_LocknKey,data\A2_LocknKey\2015_J_10.txt,1096,1.045,17.7,24.36,12.68,EASY
+2015_S_368,A2_LocknKey,data\A2_LocknKey\2015_S_368.txt,1428,1.027,20.38,23.95,11.48,EASY

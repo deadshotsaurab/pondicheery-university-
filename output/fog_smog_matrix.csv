@@ -1,0 +1,51 @@
+case_num,case_id,fog_orig_judgement,fog_ground_truth,fog_locknkey,fog_level_oj,fog_level_gt,fog_level_lk,smog_orig_judgement,smog_ground_truth,smog_locknkey,smog_level_oj,smog_level_gt,smog_level_lk
+1,1953_L_1,18.4005,17.747,17.5627,Very Hard,Very Hard,Very Hard,14.6569,14.5777,14.5931,Hard,Hard,Hard
+2,1953_S_23,17.0691,16.7469,16.3146,Very Hard,Hard,Hard,14.3447,14.4564,14.1484,Hard,Hard,Hard
+3,1954_M_25,19.2927,17.3812,17.0307,Very Hard,Very Hard,Very Hard,15.6823,14.5501,14.4018,Hard,Hard,Hard
+4,1963_S_59,17.3747,12.2894,12.1885,Very Hard,Hard,Hard,14.4556,11.4096,11.3427,Hard,Acceptable,Acceptable
+5,1971_S_1,19.2911,17.9953,16.7715,Very Hard,Very Hard,Hard,15.5116,14.8218,14.1316,Hard,Hard,Hard
+6,1973_S_68,20.4687,18.8341,18.3835,Very Hard,Very Hard,Very Hard,15.7279,15.3828,15.0416,Hard,Hard,Hard
+7,1976_T_9,17.906,15.071,15.9592,Very Hard,Hard,Hard,15.07,13.3158,13.9265,Hard,Hard,Hard
+8,1977_P_19,24.2371,26.8772,26.587,Very Hard,Very Hard,Very Hard,17.8641,19.3639,19.1688,Very Hard,Very Hard,Very Hard
+9,1978_M_13,30.9606,28.3348,26.7951,Very Hard,Very Hard,Very Hard,20.6173,19.7102,19.2384,Very Hard,Very Hard,Very Hard
+10,1980_W_3,19.6425,20.0325,19.7989,Very Hard,Very Hard,Very Hard,16.0365,16.3429,16.2485,Very Hard,Very Hard,Very Hard
+11,1987_C_108,19.6654,17.4682,17.4379,Very Hard,Very Hard,Very Hard,16.214,14.9435,14.9272,Very Hard,Hard,Hard
+12,1987_M_123,17.479,18.6952,18.7255,Very Hard,Very Hard,Very Hard,14.3826,15.0,15.0185,Hard,Hard,Hard
+13,1987_S_26,17.1798,16.5439,17.6295,Very Hard,Hard,Very Hard,14.2966,14.005,14.5109,Hard,Hard,Hard
+14,1989_A_55,18.7824,18.8644,18.5703,Very Hard,Very Hard,Very Hard,15.3762,15.2474,15.1321,Hard,Hard,Hard
+15,1994_M_69,23.0542,22.0606,22.1871,Very Hard,Very Hard,Very Hard,16.3429,15.9099,15.682,Very Hard,Hard,Hard
+16,1994_S_246,19.524,22.2171,22.2877,Very Hard,Very Hard,Very Hard,16.1673,17.8083,17.7912,Very Hard,Very Hard,Very Hard
+17,1995_S_317,19.111,16.9877,17.807,Very Hard,Hard,Very Hard,15.6138,14.2969,14.7072,Hard,Hard,Hard
+18,1996_B_72,25.0798,23.6769,23.5086,Very Hard,Very Hard,Very Hard,17.9251,17.4609,17.4072,Very Hard,Very Hard,Very Hard
+19,1996_T_169,20.6753,20.0187,21.5817,Very Hard,Very Hard,Very Hard,16.2665,15.9151,16.6438,Very Hard,Hard,Very Hard
+20,2000_C_151,20.6087,23.526,23.2497,Very Hard,Very Hard,Very Hard,16.8955,18.5102,18.5597,Very Hard,Very Hard,Very Hard
+21,2000_V_80,20.0133,24.5365,22.7365,Very Hard,Very Hard,Very Hard,16.2205,18.4037,17.4914,Very Hard,Very Hard,Very Hard
+22,2001_A_234,21.0355,20.6064,20.5364,Very Hard,Very Hard,Very Hard,16.7687,16.5785,16.5448,Very Hard,Very Hard,Very Hard
+23,2001_S_1131,16.6046,18.1777,17.3112,Hard,Very Hard,Very Hard,14.1588,15.1752,14.7424,Hard,Hard,Hard
+24,2004_C_129,18.0892,18.9521,19.1344,Very Hard,Very Hard,Very Hard,15.1947,15.827,15.968,Hard,Hard,Hard
+25,2004_I_24,16.2702,14.6409,15.5616,Hard,Hard,Hard,14.0658,13.0,13.6543,Hard,Hard,Hard
+26,2005_S_388,19.7131,20.2399,20.116,Very Hard,Very Hard,Very Hard,15.9785,16.2288,16.1789,Hard,Very Hard,Very Hard
+27,2006_A_136,17.8673,16.5301,16.6512,Very Hard,Hard,Hard,14.9324,14.2619,14.3494,Hard,Hard,Hard
+28,2006_A_36,18.7472,16.7454,20.1876,Very Hard,Hard,Very Hard,15.723,14.4478,16.6107,Hard,Hard,Very Hard
+29,2007_B_76,20.6936,17.6333,18.1284,Very Hard,Very Hard,Very Hard,16.2209,14.5031,14.7473,Very Hard,Hard,Hard
+30,2007_C_121,17.2223,20.6012,20.8463,Very Hard,Very Hard,Very Hard,14.1041,15.8558,16.0846,Hard,Hard,Very Hard
+31,2007_S_608,17.3988,17.3414,16.7345,Very Hard,Very Hard,Hard,14.5719,14.4018,14.1243,Hard,Hard,Hard
+32,2007_S_632,17.8121,19.5039,18.7484,Very Hard,Very Hard,Very Hard,14.9615,16.0192,15.6323,Hard,Very Hard,Hard
+33,2007_U_18,19.2082,17.9986,18.1697,Very Hard,Very Hard,Very Hard,15.3555,14.7861,14.7861,Hard,Hard,Hard
+34,2008_A_260,20.0769,21.2684,21.1652,Very Hard,Very Hard,Very Hard,15.7519,16.7386,16.6875,Hard,Very Hard,Very Hard
+35,2008_C_166,18.4263,16.4592,18.4778,Very Hard,Hard,Very Hard,14.8383,14.0424,15.1655,Hard,Hard,Hard
+36,2008_I_54,20.3484,20.106,20.8367,Very Hard,Very Hard,Very Hard,16.373,16.2032,16.6208,Very Hard,Very Hard,Very Hard
+37,2008_P_8,17.9697,16.7012,16.207,Very Hard,Hard,Hard,14.8718,14.2052,13.9545,Hard,Hard,Hard
+38,2008_S_1411,18.6523,17.3795,20.8913,Very Hard,Very Hard,Very Hard,15.1367,14.6478,16.5804,Hard,Hard,Very Hard
+39,2008_S_549,23.047,26.7713,26.3173,Very Hard,Very Hard,Very Hard,16.9313,18.8251,18.6402,Very Hard,Very Hard,Very Hard
+40,2009_B_16,19.5248,18.467,18.2939,Very Hard,Very Hard,Very Hard,15.9465,15.4663,15.3807,Hard,Hard,Hard
+41,2009_S_146,17.4986,15.6785,13.159,Very Hard,Hard,Hard,14.532,13.6668,11.9546,Hard,Hard,Acceptable
+42,2010_J_55,21.0831,19.7617,19.7617,Very Hard,Very Hard,Very Hard,16.5717,16.1241,16.1241,Very Hard,Very Hard,Very Hard
+43,2010_S_431,20.2031,17.5773,20.8182,Very Hard,Very Hard,Very Hard,15.4482,14.1631,15.6384,Hard,Hard,Hard
+44,2011_I_16,18.4783,20.873,21.1077,Very Hard,Very Hard,Very Hard,15.0364,16.4895,16.6015,Hard,Very Hard,Very Hard
+45,2011_S_308,19.1796,18.3279,19.0244,Very Hard,Very Hard,Very Hard,15.6742,15.3346,15.8044,Hard,Hard,Hard
+46,2012_S_270,16.1567,15.9508,15.6604,Hard,Hard,Hard,13.5145,13.5227,13.2817,Hard,Hard,Hard
+47,2014_J_33,15.9646,14.8014,16.3548,Hard,Hard,Hard,13.8012,13.0658,13.924,Hard,Hard,Hard
+48,2014_R_41,15.1196,13.7797,13.7556,Hard,Hard,Hard,13.3158,12.4088,12.389,Hard,Hard,Hard
+49,2015_J_10,16.19,14.272,14.7587,Hard,Hard,Hard,14.0104,12.7321,13.1043,Hard,Hard,Hard
+50,2015_S_368,21.4333,20.5558,20.3599,Very Hard,Very Hard,Very Hard,17.2987,16.9958,16.8606,Very Hard,Very Hard,Very Hard

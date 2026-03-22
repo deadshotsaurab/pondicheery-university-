@@ -1,0 +1,37 @@
+{
+  "silhouette_score": 0.1311,
+  "davies_bouldin_index": 1.7987,
+  "avg_confidence": 0.7696,
+  "low_conf_words": 1044,
+  "high_conf_words": 3755,
+  "cluster_stats": {
+    "LAYMAN": {
+      "count": 1896,
+      "avg_zipf_score": 4.6411,
+      "avg_word_length": 5.9082,
+      "avg_domain_specificity": 1.0991,
+      "avg_sim_layman": 0.4678,
+      "avg_sim_student": 0.3745,
+      "avg_sim_professional": 0.3779
+    },
+    "PROFESSIONAL": {
+      "count": 3682,
+      "avg_zipf_score": 2.7896,
+      "avg_word_length": 7.9845,
+      "avg_domain_specificity": 4.059,
+      "avg_sim_layman": 0.3577,
+      "avg_sim_student": 0.3326,
+      "avg_sim_professional": 0.3801
+    },
+    "STUDENT": {
+      "count": 1720,
+      "avg_zipf_score": 4.0976,
+      "avg_word_length": 8.5349,
+      "avg_domain_specificity": 2.0354,
+      "avg_sim_layman": 0.4085,
+      "avg_sim_student": 0.4706,
+      "avg_sim_professional": 0.4388
+    }
+  },
+  "seed_recovery_rate": 0.5145
+}
