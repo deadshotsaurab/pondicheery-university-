@@ -91,14 +91,9 @@ def create_all_visualizations(features, df=None, labels=None, probs=None,
 
     # ── 02 t-SNE SCATTER ──────────────────────────────────────────────────
     try:
-        perp  = min(30, max(5, len(features) // 10))
-        # max_iter replaces deprecated n_iter in sklearn >= 1.5
-        try:
-            tsne = TSNE(n_components=2, random_state=42, perplexity=perp,
-                        max_iter=500, verbose=0)
-        except TypeError:
-            tsne = TSNE(n_components=2, random_state=42, perplexity=perp,
-                        n_iter=500, verbose=0)
+        perp   = min(30, max(5, len(features) // 10))
+        tsne   = TSNE(n_components=2, random_state=42, perplexity=perp,
+                      n_iter=500, verbose=0)
         coords2 = tsne.fit_transform(features)
         fig, ax = plt.subplots(figsize=(9, 7))
         fig.patch.set_facecolor("#1a1a2e")
