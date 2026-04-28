@@ -100,7 +100,7 @@ def detect_proper_nouns(documents: list, cap_ratio: float, min_cap: int) -> set:
             flagged.add(word)
 
     print(f"  Auto proper-noun filter: {len(flagged)} words flagged "
-          f"(cap_ratio≥{cap_ratio}, min_cap≥{min_cap})")
+          f"(cap_ratio>={cap_ratio}, min_cap>={min_cap})")
     return flagged
 
 
@@ -140,7 +140,7 @@ def compute_zipf_bounds_from_seeds(seed_words: dict, sigma: float):
     lower = max(0.0, prof_mean - sigma * global_std)
 
     print(f"  Auto zipf bounds: [{lower:.2f}, {upper:.2f}]  "
-          f"(seed-derived, σ={sigma})")
+          f"(seed-derived, sigma={sigma})")
     return lower, upper
 
 

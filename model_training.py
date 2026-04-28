@@ -11,6 +11,7 @@ import pickle
 import os
 from collections import Counter
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.mixture import GaussianMixture
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import cross_val_score
 from wordfreq import zipf_frequency
@@ -184,7 +185,7 @@ def classify_all_words(df: pd.DataFrame,
     # Auto-derived zipf boundaries (from seed distributions)
     boundary_LS, boundary_SP = _get_zipf_boundaries(thresholds)
     print(f"  Auto zipf boundaries (seed-derived): "
-          f"LAYMAN≥{boundary_LS:.2f} | STUDENT≥{boundary_SP:.2f} | "
+          f"LAYMAN>={boundary_LS:.2f} | STUDENT>={boundary_SP:.2f} | "
           f"PROFESSIONAL<{boundary_SP:.2f}")
 
     fallback_count = 0
@@ -322,19 +323,115 @@ def analyze_clusters(df: pd.DataFrame, labels: np.ndarray) -> dict:
 # SAVE / LOAD MODEL
 # ═══════════════════════════════════════════════════════════════════════════════
 
-def save_model(clf, scaler, thresholds, feature_cols, output_dir: str):
+def save_model(model, scaler, thresholds_or_label_map, feature_cols, output_dir: str):
     os.makedirs(output_dir, exist_ok=True)
-    with open(os.path.join(output_dir, "classifier.pkl"), "wb") as f:
-        pickle.dump({
-            "clf":          clf,
-            "scaler":       scaler,
-            "thresholds":   thresholds,
+    if hasattr(model, 'predict_proba') and hasattr(model, 'n_components'):  # GMM
+        filename = "gmm_model.pkl"
+        data = {
+            "gmm": model,
+            "scaler": scaler,
+            "label_map": thresholds_or_label_map,
             "feature_cols": feature_cols,
-        }, f)
+        }
+    else:  # KNN
+        filename = "classifier.pkl"
+        data = {
+            "clf": model,
+            "scaler": scaler,
+            "thresholds": thresholds_or_label_map,
+            "feature_cols": feature_cols,
+        }
+    with open(os.path.join(output_dir, filename), "wb") as f:
+        pickle.dump(data, f)
     print("Model saved successfully.")
 
 
 def load_model(output_dir: str):
-    path = os.path.join(output_dir, "classifier.pkl")
-    with open(path, "rb") as f:
+    # Try GMM first
+    gmm_path = os.path.join(output_dir, "gmm_model.pkl")
+    if os.path.exists(gmm_path):
+        with open(gmm_path, "rb") as f:
+            return pickle.load(f)
+    # Fallback to KNN
+    clf_path = os.path.join(output_dir, "classifier.pkl")
+    with open(clf_path, "rb") as f:
         return pickle.load(f)
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# GMM MODEL FUNCTIONS
+# ═══════════════════════════════════════════════════════════════════════════════
+
+def train_gmm_model(normalized, n_components=3, covariance_type='full', random_state=42, **kwargs):
+    """
+    Train a Gaussian Mixture Model on normalized features.
+    """
+    gmm = GaussianMixture(
+        n_components=n_components,
+        covariance_type=covariance_type,
+        random_state=random_state,
+        **kwargs
+    )
+    gmm.fit(normalized)
+    return gmm
+
+
+def predict_components(gmm, normalized):
+    """
+    Predict cluster components for each data point.
+    """
+    return gmm.predict(normalized)
+
+
+def predict_probabilities(gmm, normalized):
+    """
+    Predict probabilities for each component.
+    """
+    return gmm.predict_proba(normalized)
+
+
+def analyze_components(gmm, normalized, df, labels):
+    """
+    Analyze GMM components and compute statistics.
+    """
+    comp_stats = {}
+    for i in range(gmm.n_components):
+        mask = labels == i
+        subset = df[mask]
+        comp_stats[i] = {
+            'size': len(subset),
+            'avg_zipf_score': subset.get('zipf_score', pd.Series()).mean() if len(subset) > 0 else 0,
+            'avg_word_length': subset.get('word_length', pd.Series()).mean() if len(subset) > 0 else 0,
+            'avg_domain_specificity': subset.get('domain_specificity', pd.Series()).mean() if len(subset) > 0 else 0,
+        }
+    return comp_stats
+
+
+def assign_labels_automatic(comp_stats, seed_words, df, raw_labels, feature_cols):
+    """
+    Automatically assign difficulty labels (LAYMAN, STUDENT, PROFESSIONAL) to GMM components
+    based on component statistics and seed word analysis.
+    """
+    # Sort components by average zipf score (higher zipf = easier words)
+    sorted_comps = sorted(comp_stats.items(), key=lambda x: x[1]['avg_zipf_score'], reverse=True)
+    
+    # Assume 3 components: LAYMAN (easiest), STUDENT (medium), PROFESSIONAL (hardest)
+    label_map = {}
+    labels = ['LAYMAN', 'STUDENT', 'PROFESSIONAL']
+    for idx, (comp_id, _) in enumerate(sorted_comps):
+        if idx < len(labels):
+            label_map[comp_id] = labels[idx]
+        else:
+            label_map[comp_id] = f'UNKNOWN_{comp_id}'
+    
+    return label_map
+
+
+def print_final_results(gmm, datasets, comp_stats, label_map):
+    """
+    Print final GMM results.
+    """
+    print("\nFINAL GMM RESULTS:")
+    for comp_id, stats in comp_stats.items():
+        label = label_map.get(comp_id, f'Component {comp_id}')
+        print(f"  {label}: {stats['size']} words, avg_zipf={stats['avg_zipf_score']:.2f}")

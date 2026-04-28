@@ -85,9 +85,9 @@ def create_all_visualizations(features, df=None, labels=None, probs=None,
         plt.tight_layout()
         plt.savefig(os.path.join(output_dir, "01_pca_clusters.png"), dpi=150)
         plt.close()
-        print("  ✔  01_pca_clusters.png")
+        print("  [OK]  01_pca_clusters.png")
     except Exception as e:
-        print(f"  ✗  01_pca_clusters.png  ({e})")
+        print(f"  [FAIL]  01_pca_clusters.png  ({e})")
 
     # ── 02 t-SNE SCATTER ──────────────────────────────────────────────────
     try:
@@ -111,9 +111,9 @@ def create_all_visualizations(features, df=None, labels=None, probs=None,
         plt.tight_layout()
         plt.savefig(os.path.join(output_dir, "02_tsne_clusters.png"), dpi=150)
         plt.close()
-        print("  ✔  02_tsne_clusters.png")
+        print("  [OK]  02_tsne_clusters.png")
     except Exception as e:
-        print(f"  ✗  02_tsne_clusters.png  ({e})")
+        print(f"  [FAIL]  02_tsne_clusters.png  ({e})")
 
     # ── 03 CLUSTER DISTRIBUTION ───────────────────────────────────────────
     try:
@@ -136,9 +136,9 @@ def create_all_visualizations(features, df=None, labels=None, probs=None,
         plt.tight_layout()
         plt.savefig(os.path.join(output_dir, "03_cluster_distribution.png"), dpi=150)
         plt.close()
-        print("  ✔  03_cluster_distribution.png")
+        print("  [OK]  03_cluster_distribution.png")
     except Exception as e:
-        print(f"  ✗  03_cluster_distribution.png  ({e})")
+        print(f"  [FAIL]  03_cluster_distribution.png  ({e})")
 
     # ── 04 FEATURE CORRELATION HEATMAP ────────────────────────────────────
     try:
@@ -158,9 +158,9 @@ def create_all_visualizations(features, df=None, labels=None, probs=None,
             plt.tight_layout()
             plt.savefig(os.path.join(output_dir, "04_feature_correlation.png"), dpi=150)
             plt.close()
-            print("  ✔  04_feature_correlation.png")
+            print("  [OK]  04_feature_correlation.png")
     except Exception as e:
-        print(f"  ✗  04_feature_correlation.png  ({e})")
+        print(f"  [FAIL]  04_feature_correlation.png  ({e})")
 
     # ── 05 FEATURE BOX PLOTS ──────────────────────────────────────────────
     try:
@@ -197,9 +197,9 @@ def create_all_visualizations(features, df=None, labels=None, probs=None,
             plt.savefig(os.path.join(output_dir, "05_feature_boxplots.png"),
                         dpi=150, bbox_inches="tight")
             plt.close()
-            print("  ✔  05_feature_boxplots.png")
+            print("  [OK]  05_feature_boxplots.png")
     except Exception as e:
-        print(f"  ✗  05_feature_boxplots.png  ({e})")
+        print(f"  [FAIL]  05_feature_boxplots.png  ({e})")
 
     # ── 06 CONFIDENCE HISTOGRAM ───────────────────────────────────────────
     try:
@@ -224,9 +224,9 @@ def create_all_visualizations(features, df=None, labels=None, probs=None,
             plt.tight_layout()
             plt.savefig(os.path.join(output_dir, "06_confidence_histogram.png"), dpi=150)
             plt.close()
-            print("  ✔  06_confidence_histogram.png")
+            print("  [OK]  06_confidence_histogram.png")
     except Exception as e:
-        print(f"  ✗  06_confidence_histogram.png  ({e})")
+        print(f"  [FAIL]  06_confidence_histogram.png  ({e})")
 
     # ── 07 TOP WORDS PER CLUSTER ──────────────────────────────────────────
     try:
@@ -259,9 +259,9 @@ def create_all_visualizations(features, df=None, labels=None, probs=None,
             plt.savefig(os.path.join(output_dir, "07_top_words.png"),
                         dpi=150, bbox_inches="tight")
             plt.close()
-            print("  ✔  07_top_words.png")
+            print("  [OK]  07_top_words.png")
     except Exception as e:
-        print(f"  ✗  07_top_words.png  ({e})")
+        print(f"  [FAIL]  07_top_words.png  ({e})")
 
     # ── 08 ZIPF DISTRIBUTION PER CLUSTER ─────────────────────────────────
     try:
@@ -286,8 +286,8 @@ def create_all_visualizations(features, df=None, labels=None, probs=None,
             plt.tight_layout()
             plt.savefig(os.path.join(output_dir, "08_zipf_distribution.png"), dpi=150)
             plt.close()
-            print("  ✔  08_zipf_distribution.png")
+            print("  [OK]  08_zipf_distribution.png")
     except Exception as e:
-        print(f"  ✗  08_zipf_distribution.png  ({e})")
+        print(f"  [FAIL]  08_zipf_distribution.png  ({e})")
 
     print("All visualizations generated successfully.")

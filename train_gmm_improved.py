@@ -26,13 +26,12 @@ from sklearn.preprocessing import StandardScaler
 import config
 
 from feature_engineering import (
-    read_corpus_files,
-    build_word_frequency,
+    read_corpus,
     filter_words,
-    extract_features,
-    SeedSimilarityFeaturizer,
+    extract_all_features,
     get_feature_matrix,
 )
+from seed_similarity import SeedSimilarityFeaturizer
 
 from model_training import (
     train_gmm_model,
@@ -93,37 +92,28 @@ SEED_WORDS = {
 def main():
     os.makedirs(config.OUTPUT_DIR, exist_ok=True)
 
-    # ── 1. Read corpus ────────────────────────────────────────────────────────
-    file_paths = glob.glob(os.path.join(config.DATA_DIR, "*.txt"))
-    if not file_paths:
-        raise FileNotFoundError(f"No .txt files found in {config.DATA_DIR}")
-
-    documents = read_corpus_files(file_paths)
-
-    # ── 2. Word frequency ─────────────────────────────────────────────────────
-    raw_freq = build_word_frequency(
-        documents,
-        min_freq=config.MIN_FREQUENCY,
-        min_length=config.MIN_WORD_LENGTH,
-    )
+    # ── 1 + 2. Read corpus and word frequency ─────────────────────────────────
+    documents, raw_freq = read_corpus(config.DATA_DIR)
     print(f"  Raw vocabulary: {len(raw_freq)} words")
 
     # ── 3. Auto-filter (proper nouns, zipf bounds) ────────────────────────────
     filtered_freq = filter_words(
-        raw_freq,
+        word_freq=raw_freq,
         documents=documents,
-        min_freq=config.MIN_FREQUENCY,
-        min_length=config.MIN_WORD_LENGTH,
+        seed_words=SEED_WORDS,
+        min_freq=config.MIN_CORPUS_FREQ,
+        min_len=config.MIN_WORD_LENGTH,
+        sigma=config.ZIPF_SIGMA_FILTER,
+        cap_ratio=config.CAP_RATIO_THRESH,
+        min_cap=config.MIN_CAP_COUNT,
     )
     print(f"  Filtered vocabulary: {len(filtered_freq)} words")
 
     # ── 4 + 5. Feature extraction + BERT seed similarities ───────────────────
-    seed_featurizer = SeedSimilarityFeaturizer(SEED_WORDS)
-
-    df = extract_features(
-        filtered_freq,
-        documents,
-        seed_featurizer=seed_featurizer,
+    df = extract_all_features(
+        word_freq=filtered_freq,
+        documents=documents,
+        seed_words=SEED_WORDS,
     )
 
     # ── 6. Normalise ──────────────────────────────────────────────────────────
@@ -137,9 +127,6 @@ def main():
     gmm = train_gmm_model(
         normalized,
         n_components=config.N_COMPONENTS if hasattr(config, "N_COMPONENTS") else 3,
-        seed_words=SEED_WORDS,
-        df=df,
-        feature_cols=feature_cols,
     )
 
     # ── 8. Predictions ────────────────────────────────────────────────────────
@@ -151,15 +138,12 @@ def main():
     label_map  = assign_labels_automatic(comp_stats, SEED_WORDS, df,
                                           raw_labels, feature_cols)
 
-    # ── 10. Auto-validate / correct mislabeled words ─────────────────────────
-    labels = auto_validate_labels(
-        df, raw_labels, probs, label_map,
-        seed_words=SEED_WORDS,
-        confidence_threshold=0.55,
-    )
+    # ── 10. Map labels and skip auto-validate for GMM for now ────────────────
+    str_labels = np.array([label_map[l] for l in raw_labels])
+    labels = str_labels
 
     # ── 11. Build + save datasets ─────────────────────────────────────────────
-    datasets = create_vocabulary_datasets(df, labels, probs, label_map)
+    datasets = create_vocabulary_datasets(df, labels, probs)
     save_vocabulary_datasets(datasets, config.OUTPUT_DIR)
     save_model(gmm, scaler, label_map, feature_cols, config.OUTPUT_DIR)
     print_final_results(gmm, datasets, comp_stats, label_map)
